@@ -43,3 +43,6 @@ next-env.d.ts
 
 # local database
 local.db*
+
+# source asset packs (extracted into public/models)
+*.zip

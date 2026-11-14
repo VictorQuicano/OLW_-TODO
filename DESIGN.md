@@ -286,41 +286,46 @@ Do not treat this structure as a rigid wireframe.
 
 ---
 
-# 11. 3D Experience
+# 11. 3D World
 
-3D is an enhancement, not the foundation of the application.
+The home of the application is **a small 3D world** built with the Kenney Platformer Kit.
+Each person picks a character from Kenney Cube Pets and walks around it.
+
+On capable devices the world is the primary way to navigate. It is never the only way:
+`/lista` is a complete 2D equivalent with every feature.
 
 Use:
 
 - React Three Fiber
 - Drei
-- Three.js concepts where appropriate
+- Kenney assets (CC0) served from `public/models/`
 
-Potential 3D experiences:
+## World
 
-### Shared world
+- A compact grassy island (~9×9 blocks) with trees, flowers, fences and rocks.
+- **Zones** are landmarks on the island, one per category:
+  - 🍜 Comida — barrels, crates and a sign
+  - 📍 Lugares — a big tree, a sign and flowers
+  - 🎬 Pelis/Series — a small stage with stars
+  - 🎵 Música — a platform with tall flowers and hearts
+- Stepping into a zone highlights its ground ring and shows an "Entrar a <zona>" button in the HUD.
+  Entering opens a **2D panel** (bottom sheet on mobile, side sheet on desktop) with the list and the form.
+  Forms are never rendered inside the 3D scene.
+- The other person's pet stands in their own corner, idle, with their name. There is no real-time presence.
+- Zones may show a few small objects reflecting how many items they hold (max 5).
 
-A small interactive 3D world or planet representing the things we want to experience.
+## Characters
 
-### Floating objects
+- Each person chooses one of the 24 Cube Pets on `/elegir`. The choice is stored per user.
+- The picker uses the 2D preview images; only the selected pet is loaded in 3D.
+- Animations: `idle` at rest, `walk`/`run` while moving, `dance` on the picker and for special moments.
 
-Subtle objects representing categories:
+## Controls
 
-- Food
-- Movies
-- Music
-- Travel
-
-### Ambient elements
-
-- Particles
-- Stars
-- Soft floating objects
-- Subtle depth
-
-### Interactive transitions
-
-3D can be used to transition between major sections.
+- Tap or click on the ground → the pet walks there.
+- WASD / arrow keys on desktop.
+- Enter / E to enter the current zone.
+- No physics engine: flat ground, world bounds and simple circular obstacles.
 
 ---
 
@@ -338,9 +343,9 @@ Subtle objects representing categories:
 3D must never:
 
 - Prevent users from completing tasks
-- Obscure content
-- Consume most of the screen unnecessarily
-- Run expensive animations continuously
+- Obscure forms or content panels
+- Be the only way to reach a feature (the HUD and `/lista` cover everything)
+- Run expensive work while hidden or covered by a panel
 - Become a distraction
 
 The application must remain usable when:
@@ -349,7 +354,9 @@ The application must remain usable when:
 - Reduced motion is enabled
 - The device has limited GPU capability
 
-Use lazy loading and code splitting for heavy 3D components.
+In those cases, show a static fallback that links to `/lista`.
+
+Use lazy loading and code splitting for all 3D components.
 
 ---
 
@@ -498,14 +505,14 @@ Example:
 ```text
 🍜 Restaurant
 
-Victor          ✓
+Alejandro       ✓
 Claudia         ○
 ```
 
 When both have completed something:
 
 ```text
-Victor          ✓
+Alejandro       ✓
 Claudia         ✓
 
 ✨ Completed together
@@ -612,7 +619,7 @@ The detail view feels like opening a page of the scrapbook:
 - Title in the display font.
 - Status control as a 3-step segmented track: Idea → Planned → Completed.
 - Approximate date picker with precision options (Someday / Year / Season / Month / Day).
-- Shared completion block (Victor / Claudia) with the "completed together" moment.
+- Shared completion block (Alejandro / Claudia) with the "completed together" moment.
 - Notes as free text, rendered with comfortable line length (~65ch).
 
 On desktop it may open as a side sheet over the list (URL still changes).

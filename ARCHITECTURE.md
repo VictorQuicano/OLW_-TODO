@@ -778,9 +778,13 @@ Do not implement complex RBAC unless a future requirement actually needs it.
 
 # 19. 3D Architecture
 
-3D is an enhancement layer.
+The 3D world is the **primary navigation on capable devices**, with a complete 2D equivalent
+(`/lista`, plus HUD buttons for every zone).
 
-The application must remain functional without it.
+The application must remain fully functional without it.
+
+The world only emits events (e.g. `onZoneChange`). All data and mutations live in 2D components
+and Server Actions; the scene never talks to storage.
 
 Architecture:
 
@@ -1173,7 +1177,7 @@ Example:
 TURSO_DATABASE_URL=file:local.db
 TURSO_AUTH_TOKEN=
 AUTH_SECRET=
-USER_A_NAME=Victor
+USER_A_NAME=Alejandro
 USER_A_PIN=
 USER_B_NAME=Claudia
 USER_B_PIN=
@@ -1714,4 +1718,8 @@ Decisions taken before implementation. Change them only with explicit approval.
 | Animation        | `motion` (`motion/react`)                                                | §3. |
 | 3D               | `three` + `@react-three/fiber` + `@react-three/drei`, lazy client-only   | §19–20. |
 | Next 16 specifics| `proxy.ts` (not `middleware.ts`), async request APIs, Cache Components off | Current framework conventions. |
+| World assets     | Kenney Cube Pets + Platformer Kit (CC0) extracted to `public/models/{pets,world}` with their own `Textures/colormap.png` | GLBs reference the texture by relative path. |
+| Movement         | Click/tap-to-move + WASD, no physics engine; zones and obstacles as circles in `world-layout.ts` | §20: no unnecessary real-time physics. |
+| Character choice | `profiles` table (`user_key`, `pet`)                                     | Both people see each other's pet. |
+| Open zone        | URL state `/?zona=<type>`                                                | §23: back button and refresh work. |
 

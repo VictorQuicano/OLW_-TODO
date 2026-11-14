@@ -2,11 +2,11 @@
 
 # Our Little World
 
-Private shared scrapbook for two people (Victor & Claudia): places to eat, places to visit,
+Private shared scrapbook for two people (Alejandro & Claudia): places to eat, places to visit,
 movies/series, music, trips and activities — with an idea → planned → completed lifecycle,
 approximate dates and per-person completion ("completed together").
 
-It must feel like a personal, cinematic, slightly dreamy space with light 3D touches —
+It must feel like a personal, cinematic, slightly dreamy space: a small 3D world you walk around —
 **never** a generic CRUD / SaaS dashboard.
 
 ## Source of truth
@@ -49,7 +49,10 @@ pnpm dev         # local dev server
 pnpm typecheck   # next typegen && tsc --noEmit (typegen needed for LayoutProps/PageProps)
 pnpm lint        # eslint (flat config)
 pnpm build       # production build
+pnpm db:migrate  # apply pending SQL in src/lib/storage/migrations (uses .env.local)
 ```
+
+Schema changes = a new numbered file in `src/lib/storage/migrations/` (never edit an applied one).
 
 Definition of done for any change: `pnpm typecheck && pnpm lint && pnpm build` all pass.
 
@@ -101,11 +104,19 @@ storage provider; the domain never imports React, Next or a provider SDK.
 ## 3D rules (short version of DESIGN.md §11 / ARCHITECTURE.md §19–20)
 
 - All Three/R3F code stays in `src/components/3d/`. Nothing else imports `three`.
-- Lazy-load every scene; render a static/CSS fallback when WebGL is missing,
-  `prefers-reduced-motion` is set, or on low-power/mobile.
+- Lazy-load every scene; render a static fallback (link to `/lista`) when WebGL is missing,
+  `prefers-reduced-motion` is set, or the device is low-power.
 - Use `frameloop="demand"` or pause when off-screen; low poly, shared geometries/materials,
   capped DPR (`dpr={[1, 1.5]}`), no post-processing unless justified.
-- 3D never blocks content or interaction and never takes most of the viewport.
+- 3D never covers forms/panels and never is the only way to reach a feature.
+
+## World rules
+
+- Home = 3D world (Kenney assets in `public/models/pets` and `public/models/world`, each with its
+  own `Textures/colormap.png` — keep that relative path or models render white).
+- Zones open 2D panels via `/?zona=<type>`; forms never live in the scene.
+- Every feature must also work in `/lista` (no 3D) and from HUD buttons.
+- Assets are CC0 by Kenney; credits in `public/models/CREDITS.txt`.
 
 ## Motion rules
 
